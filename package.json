@@ -1,0 +1,24 @@
+{
+  "name": "lull",
+  "version": "0.1.0",
+  "description": "A silent pomodoro—forget the hour, mind your work.",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Smiog/lull.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Smiog/lull/issues"
+  },
+  "homepage": "https://github.com/Smiog/lull#readme",
+  "devDependencies": {
+    "electron": "^44.4.5"
+  }
+}
