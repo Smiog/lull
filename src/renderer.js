@@ -42,13 +42,14 @@ function render() {
     if (state === "idle")
         setHTML(`<div class="title">Lull</div><div class="sub">A silent pomodoro</div><button id="start" class="btn">Focus</button>`)
     else if (state === "focus")
-        setHTML(`<div class="title">Focusing</div><div class="time">${fmt(getTime("elapsed") / 1000, "short")}</div><button id="stop" class="btn danger">Stop</button>`)
+        setHTML(`<div class="title">Focusing</div><div class="sub">Tap Stop when you're tired</div><button id="stop" class="btn danger">Stop</button>`)
     else if (state === "warn")
         setHTML(`<div class="title">Only ${fmt(getTime("elapsed") / 1000, "long")} of focus</div><div class="sub">Less than 25m — keep going?</div><div class="row"><button id="continue" class="btn">Keep focusing</button><button id="force" class="btn ghost">Force break</button></div>`)
     else if (state === "break")
         setHTML(`<div class="title break">Break</div><div class="time" id="cd">${fmt(Math.max(0, Math.round(getTime("remaining") / 1000)), "short")}</div><button id="skip" class="btn ghost small">Skip break</button>`)
 }
 
+/*
 function focusTick() {
     clearInterval(tick)
     tick = setInterval(() => {
@@ -59,6 +60,7 @@ function focusTick() {
             time.textContent = fmt(getTime("elapsed") / 1000, "short")
     }, 200)
 }
+*/
 
 function startBreak(elapsed) {
     endTime = Date.now() + Math.max(MIN_BREAK_MS, elapsed / 5)
@@ -83,7 +85,7 @@ function startFocus() {
     state = "focus"
     startTime = Date.now()
     render()
-    focusTick()
+    // focusTick()
 }
 
 function stopFocus() {
@@ -103,7 +105,7 @@ function continueFocus() {
         return
     state = "focus"
     render()
-    focusTick()
+    // focusTick()
 }
 
 function forceBreak() {
