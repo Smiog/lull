@@ -1,8 +1,11 @@
-const { app, BrowserWindow, ipcMain, Notification, shell } = require("electron")
+const { app, BrowserWindow, Tray, Menu, nativeImage, ipcMain, Notification, shell } = require("electron")
 const path = require("path")
 
+let win = null
+let tray = null
+
 const createWindow = () => {
-    const win = new BrowserWindow({
+    win = new BrowserWindow({
         width: 360,
         height: 280,
         webPreferences: {
@@ -10,15 +13,34 @@ const createWindow = () => {
         }
     })
     win.loadFile(path.join(__dirname, "index.html"))
+    win.on("blur", () => win.hide())
+}
+
+const createTray = () => {
+    const icon = nativeImage.createFromPath(path.join(__dirname, "..", "assets", "icon.png"))
+    icon.setTemplateImage(true)
+    tray = new Tray(icon)
+    tray.setToolTip("Lull")
+    const menu = Menu.buildFromTemplate([{
+        label: "Quit",
+        role: "quit"
+    }])
+    tray.on("click", () => {
+        if (!win || win.isDestroyed())
+            createWindow()
+        else
+            win.isVisible() ? win.hide() : win.show()
+    })
+    tray.on("right-click", () => tray.popUpContextMenu(menu))
 }
 
 app.whenReady().then(() => {
     createWindow()
+    createTray()
 
     app.on("activate", () => {
-        if (BrowserWindow.getAllWindows().length === 0) {
+        if (BrowserWindow.getAllWindows().length === 0)
             createWindow()
-        }
     })
 
     ipcMain.on("notify", (_, msg) => {
