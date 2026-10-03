@@ -49,19 +49,6 @@ function render() {
         setHTML(`<div class="title break">Break</div><div class="time" id="cd">${fmt(Math.max(0, Math.round(getTime("remaining") / 1000)), "short")}</div><button id="skip" class="btn ghost small">Skip break</button>`)
 }
 
-/*
-function focusTick() {
-    clearInterval(tick)
-    tick = setInterval(() => {
-        if (state !== "focus")
-            return
-        const time = document.querySelector(".time")
-        if (time)
-            time.textContent = fmt(getTime("elapsed") / 1000, "short")
-    }, 200)
-}
-*/
-
 function startBreak(elapsed) {
     endTime = Date.now() + Math.max(MIN_BREAK_MS, elapsed / 5)
     state = "break"
@@ -75,6 +62,10 @@ function startBreak(elapsed) {
             cd.textContent = fmt(Math.max(0, Math.round(getTime("remaining") / 1000)), "short")
         if (getTime("remaining") <= 0) {
             clearInterval(tick)
+            window.api?.notify({
+                title: "Break's over",
+                body: "Back to focus?"
+            })
             state = "idle"
             render()
         }
@@ -85,7 +76,6 @@ function startFocus() {
     state = "focus"
     startTime = Date.now()
     render()
-    // focusTick()
 }
 
 function stopFocus() {
@@ -105,7 +95,6 @@ function continueFocus() {
         return
     state = "focus"
     render()
-    // focusTick()
 }
 
 function forceBreak() {
