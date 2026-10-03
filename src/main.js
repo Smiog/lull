@@ -3,6 +3,7 @@ const path = require("path")
 
 let win = null
 let tray = null
+let isQuitting = false
 
 const createWindow = () => {
     win = new BrowserWindow({
@@ -14,6 +15,12 @@ const createWindow = () => {
     })
     win.loadFile(path.join(__dirname, "index.html"))
     win.on("blur", () => win.hide())
+    win.on("close", (e) => {
+        if (!isQuitting) {
+            e.preventDefault()
+            win.hide()
+        }
+    })
 }
 
 const createTray = () => {
@@ -51,6 +58,8 @@ app.whenReady().then(() => {
         shell.beep()
     })
 })
+
+app.on("before-quit", () => isQuitting = true)
 
 app.on("window-all-closed", () => {
     if (process.platform !== "darwin")
