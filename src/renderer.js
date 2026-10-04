@@ -52,6 +52,7 @@ function render() {
 function startBreak(elapsed) {
     endTime = Date.now() + Math.max(MIN_BREAK_MS, elapsed / 5)
     state = "break"
+    window.api?.awake(false)
     render()
     clearInterval(tick)
     tick = setInterval(() => {
@@ -73,8 +74,9 @@ function startBreak(elapsed) {
 }
 
 function startFocus() {
-    state = "focus"
     startTime = Date.now()
+    state = "focus"
+    window.api?.awake(true)
     render()
 }
 

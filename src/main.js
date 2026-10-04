@@ -1,8 +1,9 @@
-const { app, BrowserWindow, Tray, Menu, nativeImage, ipcMain, Notification, shell } = require("electron")
+const { app, BrowserWindow, Tray, Menu, nativeImage, ipcMain, Notification, shell, powerSaveBlocker } = require("electron")
 const path = require("path")
 
 let win = null
 let tray = null
+let blockerId = null
 let isQuitting = false
 
 const createWindow = () => {
@@ -56,6 +57,15 @@ app.whenReady().then(() => {
             body: msg.body
         }).show()
         shell.beep()
+    })
+
+    ipcMain.on("awake", (_, enable) => {
+        if (enable && blockerId === null)
+            blockerId = powerSaveBlocker.start("prevent-display-sleep")
+        else if (!enable && blockerId !== null) {
+            powerSaveBlocker.stop(blockerId)
+            blockerId = null
+        }
     })
 })
 

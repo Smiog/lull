@@ -1,5 +1,6 @@
 const { contextBridge, ipcRenderer } = require("electron")
 
 contextBridge.exposeInMainWorld("api", {
-    notify: (msg) => ipcRenderer.send("notify", msg)
+    notify: (msg) => ipcRenderer.send("notify", msg),
+    awake: (enable) => ipcRenderer.send("awake", enable)
 })
