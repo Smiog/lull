@@ -17,6 +17,8 @@ const createWindow = () => {
     })
     win.loadFile(path.join(__dirname, "index.html"))
     win.on("blur", () => {
+        if (!tray)
+            return
         const cursor = screen.getCursorScreenPoint()
         const bounds = tray.getBounds()
         const onTray =
