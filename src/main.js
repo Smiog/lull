@@ -10,6 +10,7 @@ const createWindow = () => {
     win = new BrowserWindow({
         width: 360,
         height: 280,
+        skipTaskbar: true,
         webPreferences: {
             preload: path.join(__dirname, "preload.js")
         }
@@ -43,6 +44,7 @@ const createTray = () => {
 }
 
 app.whenReady().then(() => {
+    app.dock?.hide()
     createWindow()
     createTray()
 
