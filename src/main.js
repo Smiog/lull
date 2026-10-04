@@ -4,6 +4,7 @@ const path = require("path")
 let win = null
 let tray = null
 let blockerId = null
+let hideTimer = null
 let isQuitting = false
 
 const createWindow = () => {
@@ -16,7 +17,7 @@ const createWindow = () => {
         }
     })
     win.loadFile(path.join(__dirname, "index.html"))
-    win.on("blur", () => win.hide())
+    win.on("blur", () => hideTimer = setTimeout(() => win.hide(), 100))
     win.on("close", (e) => {
         if (!isQuitting) {
             e.preventDefault()
@@ -35,6 +36,7 @@ const createTray = () => {
         role: "quit"
     }])
     tray.on("click", () => {
+        clearTimeout(hideTimer)
         if (!win || win.isDestroyed())
             createWindow()
         else
