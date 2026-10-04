@@ -1,10 +1,9 @@
-const { app, BrowserWindow, Tray, Menu, nativeImage, ipcMain, Notification, shell, powerSaveBlocker } = require("electron")
+const { app, BrowserWindow, Tray, Menu, nativeImage, ipcMain, Notification, shell, powerSaveBlocker, screen } = require("electron")
 const path = require("path")
 
 let win = null
 let tray = null
 let blockerId = null
-let hideTimer = null
 let isQuitting = false
 
 const createWindow = () => {
@@ -17,7 +16,17 @@ const createWindow = () => {
         }
     })
     win.loadFile(path.join(__dirname, "index.html"))
-    win.on("blur", () => hideTimer = setTimeout(() => win.hide(), 100))
+    win.on("blur", () => {
+        const cursor = screen.getCursorScreenPoint()
+        const bounds = tray.getBounds()
+        const onTray =
+            cursor.x >= bounds.x &&
+            cursor.x <= bounds.x + bounds.width &&
+            cursor.y >= bounds.y &&
+            cursor.y <= bounds.y + bounds.height
+        if (!onTray)
+            win.hide()
+    })
     win.on("close", (e) => {
         if (!isQuitting) {
             e.preventDefault()
@@ -36,7 +45,6 @@ const createTray = () => {
         role: "quit"
     }])
     tray.on("click", () => {
-        clearTimeout(hideTimer)
         if (!win || win.isDestroyed())
             createWindow()
         else
