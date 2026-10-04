@@ -10,9 +10,15 @@
     "type": "git",
     "url": "git+https://github.com/Smiog/lull.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "pomodoro",
+    "electron",
+    "productivity",
+    "focus",
+    "timer"
+  ],
+  "author": "Smiog",
+  "license": "MIT",
   "type": "commonjs",
   "bugs": {
     "url": "https://github.com/Smiog/lull/issues"
